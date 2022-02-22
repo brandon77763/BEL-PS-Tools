@@ -12,10 +12,12 @@
 #>
 #Update 
 
+$BELModulePath = $env:PSModulePath
+
 function Get-BEL_Update {
-    .\build\bel_update.ps1
+    $BELModulePath+'\build\bel_update.ps1'
 }
 
 function Show-BEL_RTFM {
-    .\functions\bel_rtfm.ps1
+     $BELModulePath+'\functions\bel_rtfm.ps1'
 }
