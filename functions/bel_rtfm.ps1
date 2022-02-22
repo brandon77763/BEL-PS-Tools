@@ -1,4 +1,5 @@
-function Show-BEL_RTFM(){" 
+function Show-BEL_RTFM(){
+    Write-Host" 
                                                                                                                           *.@@@.,  *@( (,,
                                                                                                                  %@.( %.  %@..(@,*@%/./@
                                                                                                        .#@@@*#  .@#(. @@. (*/ &@@@( @@@@& @
@@ -29,5 +30,5 @@ function Show-BEL_RTFM(){"
                  %,  (&%..  *@*  *@...&,
                #   /(.   .@.*
 
-    "
+    " -ForegroundColor red
 }
