@@ -12,10 +12,10 @@
 #>
 #Update 
 
-function Get-BEL-Update {
+function Get-BEL_Update {
     powershell  .\build\bel-update.ps1
 }
 
-function Show-BEL-RTFM {
+function Show-BEL_RTFM {
     powershell  .\build\bel-update.ps1
 }
