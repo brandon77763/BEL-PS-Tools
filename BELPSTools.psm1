@@ -12,7 +12,13 @@
 #>
 #Update 
 
-$BELModulePath = $env:PSModulePath
+$functionpath = $PSScriptRoot + "\functions\"
+$functionlist = Get-ChildItem -Path $functionpath - Name
+
+foreach ($function in $functionlist){
+    .($functionpath + $function)
+}
+
 
 function Get-BEL_Update {
     $BELModulePath+'\build\bel_update.ps1'
