@@ -13,9 +13,9 @@
 #Update 
 
 function Get-BEL_Update {
-    powershell  .\build\bel_update.ps1
+    .\build\bel_update.ps1
 }
 
 function Show-BEL_RTFM {
-    powershell  .\functions\bel_rtfm.ps1
+    .\functions\bel_rtfm.ps1
 }
