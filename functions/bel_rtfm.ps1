@@ -1,5 +1,5 @@
 function Show-BEL_RTFM(){
-    Write-Host" 
+    Write-Host "
                                                                                                                           *.@@@.,  *@( (,,
                                                                                                                  %@.( %.  %@..(@,*@%/./@
                                                                                                        .#@@@*#  .@#(. @@. (*/ &@@@( @@@@& @
