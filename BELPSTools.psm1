@@ -12,7 +12,7 @@
 #>
 #Update 
 
-function Get-BEL-Update {
+function Get-BEL_Update {
     powershell  .\build\bel_update.ps1
 }
 
