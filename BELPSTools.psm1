@@ -13,7 +13,7 @@
 #Update 
 
 $functionpath = $PSScriptRoot + "\functions\"
-$functionlist = Get-ChildItem -Path $functionpath - Name
+$functionlist = Get-ChildItem -Path $functionpath -Name
 
 foreach ($function in $functionlist){
     . ($functionpath + $function)
