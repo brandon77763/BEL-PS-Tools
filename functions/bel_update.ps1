@@ -1,3 +1,4 @@
+function Get-BEL_Update(){
 write-Host Updating GitHub Module..... 
 Install-Module -Name InstallModuleFromGitHub -RequiredVersion 0.3
 Start-Sleep -s 2
@@ -13,3 +14,5 @@ Start-Sleep -s 5
 write-Host Configuring New BELPSTools Files Module..... 
 Rename-Item -Path ".\BELPSTools-main" -NewName ".\BELPSTools"
 Start-Sleep -s 2
+}
+
