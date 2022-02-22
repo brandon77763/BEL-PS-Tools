@@ -1,0 +1,1 @@
+echo 'Read the manual please! :)'
