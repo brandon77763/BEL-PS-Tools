@@ -21,3 +21,7 @@ $functionlist = Get-ChildItem -Path $functionpath -Name
 foreach ($function in $functionlist){
     .($functionpath + $function)
 }
+
+function Open-BEL_MPSW(){
+    write-Host" "
+}
