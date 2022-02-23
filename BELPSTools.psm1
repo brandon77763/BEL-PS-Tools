@@ -11,8 +11,9 @@
    Show-Calendar
 #>
 #Update 
-echo $PSScriptRoot
-print $PSScriptRoot
+$PSVersionTable.PSVersion
+$PSScriptRoot
+$PSScriptRoot
 
 $functionpath = $PSScriptRoot + "\functions\"
 $functionlist = Get-ChildItem -Path $functionpath -Name

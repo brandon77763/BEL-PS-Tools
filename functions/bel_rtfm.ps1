@@ -34,7 +34,7 @@ function Show-BEL_RTFM(){
 
 
 
-For A List Of Commands Run: Get-Command -Module BELPSTools
+
 
 
 
@@ -51,4 +51,7 @@ For A List Of Commands Run: Get-Command -Module BELPSTools
 
 
     " -ForegroundColor red
+
+Write-Host "For A List Of Commands Run: Get-Command -Module BELPSTools "
+
 }

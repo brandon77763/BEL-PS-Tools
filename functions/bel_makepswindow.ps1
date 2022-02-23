@@ -1,3 +1,3 @@
-function Show-BEL_RTFM(){
+function Show-BEL_MPSW(){
     write-Host" "
 }
