@@ -1,3 +1,14 @@
+<#
+ .Synopsis
+  The user manual for BELPSModule.
+
+ .Description
+  Displays a list of base commands. Note this is not a full list of commands to get this be sure to RTFM :)
+
+ .Example
+   # Show a list of commands for BELPSModule.
+   Show-BEL_RTFM
+#>
 function Show-BEL_RTFM(){
     Write-Host "
                                                                                                                           *.@@@.,  *@( (,,
