@@ -1,8 +1,8 @@
 
 function Connect-BEL_ExchangeCalendarPerms{
   param(
-    [string[]] $Search
+    [string[]] $search
     )
 
-    Get-Mailbox -filter {emailaddresses -like '*$Search*'} | Foreach-Object {Get-MailboxFolderPermission -Identity ($_.identity + ':\Calendar')} | fl 
+    Get-Mailbox -filter {emailaddresses -like '*'+$search+'*'} | Foreach-Object {Get-MailboxFolderPermission -Identity ($_.identity + ':\Calendar')} | fl 
 }
