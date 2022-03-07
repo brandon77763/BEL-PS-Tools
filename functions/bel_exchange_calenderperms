@@ -1,7 +1,8 @@
 
 function Connect-BEL_ExchangeCalendarPerms{
   param(
-    [int[]] $highlightDay,
-    [string[]] $highlightDate = [DateTime]::Today.ToString()
+    [string[]] $Search
     )
+
+    Get-Mailbox -filter {emailaddresses -like '*$Search*'} | Foreach-Object {Get-MailboxFolderPermission -Identity ($_.identity + ':\Calendar')} | fl 
 }
