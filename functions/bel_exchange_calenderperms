@@ -1,0 +1,7 @@
+
+function Connect-BEL_ExchangeCalendarPerms{
+  param(
+    [int[]] $highlightDay,
+    [string[]] $highlightDate = [DateTime]::Today.ToString()
+    )
+}
