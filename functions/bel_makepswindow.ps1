@@ -1,4 +1,4 @@
-function Show-BEL_MPSW(){
+function Open-BEL_MPSW(){
     Add-Type -AssemblyName System.Windows.Forms
     Add-Type -AssemblyName System.Drawing
 
