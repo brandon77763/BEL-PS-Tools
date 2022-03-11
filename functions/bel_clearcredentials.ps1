@@ -1,3 +1,3 @@
 function Invoke-BEL_ClearCredentials(){
-     & ..\data\bel_clearcredential.bat
+     & '..\data\bel_clearcredential.bat'
 }
