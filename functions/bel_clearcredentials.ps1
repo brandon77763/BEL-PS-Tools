@@ -1,3 +1,5 @@
 function Invoke-BEL_ClearCredentials(){
-     cmd.exe /c '..\data\bel_clearcredential.bat'
+    $datapath = $PSScriptRoot + "\data\"
+    write-Host($datapath)
+     cmd.exe /c $datapath + 'bel_clearcredential.bat'
 }
