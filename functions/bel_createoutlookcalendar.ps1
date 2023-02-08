@@ -8,18 +8,30 @@ $siteidentifer = $null
 $prefix = "Conf"
 $email
 $alias
+#Room 
+$Capacity
+$Building
+$Floor
+$FloorLabel
+$Label
 
 
 
+# [8/25 12:09 PM] Brandon Luba
+# EMAIL: PHL.Conf.Roomname@crbgroup.com
 
-# EMAIL: PHL.Conf.Roomname@domain.com
+# [8/25 12:09 PM] Brandon Luba
 # NAME: PHL Conf RoomName {VC}
 
 
+function set-sleep($delay){
+    Start-Sleep -Seconds $delay
+}
+
+Connect-AzureAD
 
 
-
-function check-ExchangeOnlineConnection{
+function get-ExchangeOnlineConnection{
     #Connect & Login to ExchangeOnline (MFA)
     $getsessions = Get-PSSession | Select-Object -Property State, Name
     $isconnected = (@($getsessions) -like '@{State=Opened; Name=ExchangeOnlineInternalSession*').Count -gt 0
@@ -27,30 +39,43 @@ function check-ExchangeOnlineConnection{
         Connect-ExchangeOnline
     }    
 }
-#check-ExchangeOnlineConnection
+get-ExchangeOnlineConnection
 
-
-function create-room-account{
-    New-Mailbox -MicrosoftOnlineServicesID "$email" -Alias $roomname -Name "$roomname" -DisplayName "$displayname" -Room -EnableRoomMailboxAccount $true -RoomMailboxPassword (ConvertTo-SecureString -String $pwd1 -AsPlainText -Force)
+function build-build{
+    try {
+        New-Mailbox -MicrosoftOnlineServicesID $email -Alias $alias -Name "$roomname" -DisplayName "$displayname" -Room -EnableRoomMailboxAccount $true -RoomMailboxPassword (ConvertTo-SecureString -String $pwd1 -AsPlainText -Force)
+        set-sleep(4)
+        Set-MailboxFolderPermission -Identity $alias':\Calendar' -User Default -AccessRights LimitedDetails
+        set-sleep(4)
+        Get-MailboxFolderPermission -Identity $alias':\Calendar' | fl
+        set-sleep(4)
+        Set-Place -Identity "$alias" -Building "$Building" -Capacity "$Capacity" -CountryOrRegion ES -Floor "$Floor" -FloorLabel "$FloorLabel" -Label "$Label"
+        set-sleep(4)
+        Set-CalendarProcessing -Identity "$alias" -AutomateProcessing AutoAccept -AddOrganizerToSubject $false -DeleteComments $false -DeleteSubject $false -ProcessExternalMeetingMessages $true -RemovePrivateProperty $false -AddAdditionalResponse $true -AdditionalResponse "This is a Microsoft Teams Meeting room!"   
+        set-sleep(4) 
+        if(![string]::IsNullOrEmpty($email)){
+            set-sleep(10)
+            Set-AzureADUser -ObjectID '$email' -PasswordPolicies DisablePasswordExpiration
+        }
+    }
+    catch {
+        Write-Host "An error occurred:"
+        Write-Host $_
+    }
+   
 }
 
-function check-calendar-permissions{
-    Get-MailboxFolderPermission -Identity '*'$roomname':\Calendar' | fl 
-}
 
-function set-calendar-permissions{
-    Set-MailboxFolderPermission -Identity '*'$roomname':\Calendar' -User Default -AccessRights LimitedDetails
-}
-
-function set-calendar-processing{
-    Set-CalendarProcessing "resource name" –AllRequestOutofPolicy $false
-}
-
-
-function display-inputbox{
+function get-inputbox{
     Write-Host "Welcome to Calender Creation Automation!!!" -ForegroundColor Green
     $roomname = Read-Host -Prompt "Enter the confrence room name "
-    $pwd1 = Read-Host -Prompt ‘Enter the new confrence room password’ -AsSecureString
+    $Capacity = Read-Host -Prompt "Please enter the rooms capacity "
+    $Building = Read-Host -Prompt "Please enter building and or site "
+    $Floor = Read-Host -Prompt "Please enter the floor the room is on "
+    $FloorLabel = Read-Host -Prompt "Please enter the floor label "
+
+
+    $pwd1 = Read-Host -Prompt "Enter the new confrence room password" -AsSecureString
     
     $AV = Read-Host "Does this room have video functionality? Type(yes or no) "
     while("yes","no" -notcontains $AV)
@@ -89,6 +114,16 @@ function display-inputbox{
     Write-Host $alias -ForegroundColor Blue
     Write-Host "Email is set to "  -ForegroundColor Green
     Write-Host $email -ForegroundColor Blue
+    Write-Host "Capacity is set to "  -ForegroundColor Green
+    Write-Host $Capacity -ForegroundColor Blue
+    Write-Host "Building is set to "  -ForegroundColor Green
+    Write-Host $Building -ForegroundColor Blue
+    Write-Host "Floor is set to "  -ForegroundColor Green
+    Write-Host $Floor -ForegroundColor Blue
+    Write-Host "FloorLabel is set to "  -ForegroundColor Green
+    Write-Host $FloorLabel -ForegroundColor Blue
+    Write-Host "Label is set to "  -ForegroundColor Green
+    Write-Host $Label -ForegroundColor Blue
 
     $ConfirmSettings = Read-Host "Do you confirm the creation of this room account? Type(yes or no) "
     while("yes","no" -notcontains $ConfirmSettings)
@@ -96,9 +131,9 @@ function display-inputbox{
         $ConfirmSettings = Read-Host "Do you confirm the creation of this room account? Type(yes or no) "
     }
     if($ConfirmSettings -contains "yes"){
-        #$displayname = $roomname
+        build-build
     }else {
-        Write-Host "You have chosen to cancel the creation of this account. Now ending this script."
+        Write-Host "You have chosen to cancel the creation of this account. Now ending this script." -ForegroundColor Red
         Pause
         exit
     }
@@ -106,9 +141,7 @@ function display-inputbox{
     pause
 }
 
-display-inputbox
-
-
+get-inputbox
 
 
 (Get-PSReadlineOption).HistorySavePath
