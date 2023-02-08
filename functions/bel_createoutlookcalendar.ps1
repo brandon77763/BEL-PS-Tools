@@ -18,8 +18,6 @@ $Label
 
 
 
-
-
 function set-sleep($delay){
     Start-Sleep -Seconds $delay
 }
@@ -46,7 +44,11 @@ function build-build{
         Set-MailboxFolderPermission -Identity $alias':\Calendar' -User Default -AccessRights LimitedDetails
         set-sleep(4)
         Write-Host "Setting Mailbox Location Info..." -ForegroundColor Blue
-        Set-Place -Identity "$alias" -Building "$Building" -Capacity "$Capacity" -CountryOrRegion $CountryOrRegion -Floor "$Floor" -FloorLabel "$FloorLabel" -Label "$Label"
+        set-sleep(4)
+        Set-Place -Identity "$roomname" -Label "Conference_Room"
+        set-sleep(4)
+        #Set-Place -Identity "$alias" -Building "$Building" -Capacity "$Capacity" -CountryOrRegion $CountryOrRegion -Floor "$Floor" -FloorLabel "$FloorLabel" -Label "$Label"
+        Set-Place -Identity "$roomname" -Building "$Building" -Capacity "$Capacity" -CountryOrRegion $CountryOrRegion -Floor "$Floor"
         set-sleep(4)
         Write-Host "Applying Calendar Proccessing Variables..." -ForegroundColor Blue
         Set-CalendarProcessing -Identity "$alias" -AutomateProcessing AutoAccept -AddOrganizerToSubject $false -DeleteComments $false -DeleteSubject $false -ProcessExternalMeetingMessages $true -RemovePrivateProperty $false -AddAdditionalResponse $true -AdditionalResponse "This is a Microsoft Teams Meeting room!"
@@ -55,11 +57,12 @@ function build-build{
         Get-CalendarProcessing -Identity "$alias" | fl
         set-sleep(4)
         Get-MailboxFolderPermission -Identity $alias':\Calendar' | fl
-        set-sleep(4) 
+        set-sleep(4)
+        Get-Place -Identity "$roomname" | fl
         if(![string]::IsNullOrEmpty($email)){
-            set-sleep(10)
-            Write-Host "DisablePasswordExpiration..." -ForegroundColor Blue
-            Set-AzureADUser -ObjectID '$email' -PasswordPolicies DisablePasswordExpiration
+            #set-sleep(10)
+            #Write-Host "DisablePasswordExpiration..." -ForegroundColor Blue
+            #Set-AzureADUser -ObjectID '$email' -PasswordPolicies DisablePasswordExpiration
         }
     }
     catch {
@@ -86,8 +89,8 @@ function get-inputbox{
     $Capacity = Read-Host -Prompt "Please enter the rooms capacity "
     $Building = Read-Host -Prompt "Please enter building and or site "
     $Floor = Read-Host -Prompt "Please enter the floor the room is on "
-    $FloorLabel = Read-Host -Prompt "Please enter the floor label "
-    $Label = Read-Host -Prompt "Please enter the floor label "
+    #$FloorLabel = Read-Host -Prompt "Please enter the floor label "
+    #$Label = Read-Host -Prompt "Please enter the floor label "
     $CountryOrRegion = Read-Host -Prompt "Please enter the Country or Region EX: US, SE, DE, CH, CA "
 
 
@@ -136,10 +139,10 @@ function get-inputbox{
     Write-Host $Building -ForegroundColor Blue
     Write-Host "Floor is set to "  -ForegroundColor Green
     Write-Host $Floor -ForegroundColor Blue
-    Write-Host "FloorLabel is set to "  -ForegroundColor Green
-    Write-Host $FloorLabel -ForegroundColor Blue
-    Write-Host "Label is set to "  -ForegroundColor Green
-    Write-Host $Label -ForegroundColor Blue
+    #Write-Host "FloorLabel is set to "  -ForegroundColor Green
+    #Write-Host $FloorLabel -ForegroundColor Blue
+    #Write-Host "Label is set to "  -ForegroundColor Green
+    #Write-Host $Label -ForegroundColor Blue
 
     $ConfirmSettings = Read-Host "Do you confirm the creation of this room account? Type(yes or no) "
     while("yes","no" -notcontains $ConfirmSettings)
