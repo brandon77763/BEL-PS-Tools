@@ -17,12 +17,6 @@ $Label
 
 
 
-# [8/25 12:09 PM] Brandon Luba
-# EMAIL: PHL.Conf.Roomname@crbgroup.com
-
-# [8/25 12:09 PM] Brandon Luba
-# NAME: PHL Conf RoomName {VC}
-
 
 function set-sleep($delay){
     Start-Sleep -Seconds $delay
