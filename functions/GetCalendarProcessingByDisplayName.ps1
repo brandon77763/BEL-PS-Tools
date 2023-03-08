@@ -19,7 +19,7 @@ foreach ($mailbox in $mailboxes) {
           $output = [PSCustomObject]@{
                DisplayName = $displayName
                AutomateProcessing = $calendarProcessing.AutomateProcessing
-               AddOrganizerToSubject = $caDeleteCommentslendarProcessing.AddOrganizerToSubject
+               AddOrganizerToSubject = $calendarProcessing.AddOrganizerToSubject
                DeleteComments = $calendarProcessing.DeleteComments
                DeleteSubject = $calendarProcessing.DeleteSubject
                ProcessExternalMeetingMessages = $calendarProcessing.ProcessExternalMeetingMessages
