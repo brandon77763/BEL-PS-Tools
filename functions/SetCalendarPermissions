@@ -1,0 +1,5 @@
+Get-Mailbox -filter {emailaddresses -like '*pa conf*'} | Foreach-Object {Set-MailboxFolderPermission -Identity ($_.identity + ':\Calendar') -User Default -AccessRights LimitedDetails}
+
+ Get-Mailbox -filter {emailaddresses -like '*pa conf*'} | Foreach-Object {Get-MailboxFolderPermission -Identity ($_.identity + ':\Calendar')} | fl
+
+Get-Mailbox -filter {emailaddresses -like '*pa conf*'} | Foreach-Object {Get-MailboxFolderPermission -Identity ($_.identity + ':\Calendar')} | Export-Csv -path 'C:\caldata.csv'
