@@ -1,0 +1,33 @@
+# Connect to Azure AD
+Connect-AzureAD
+
+pause
+
+# Specify the path to the Excel file
+$filePath = "C:\Users\TeamsDeviceListCSV.csv"
+
+# Load the data from the Excel file into a variable
+$data = Import-Csv $filePath
+
+# Loop through each display name and write it to the console
+foreach ($row in $data) {
+    $DisplayName = $($row.DisplayName)
+    $Manufacturer = $($row.Manufacturer)
+    $Model = $($row.Model)
+
+    $DeviceInfo = "$Manufacturer $Model"
+
+    if (-not ($DisplayName -and $Manufacturer -and $Model)) {
+        Write-Host "One or more variables are null. Skipping script. Skipping Room $DisplayName"
+    }else{
+        $filter = "DisplayName eq '$DisplayName'"
+       # $user = Get-AzureADUser -Filter $filter
+        Get-AzureADUser -Filter $filter | Set-AzureADUser -Department "$DeviceInfo"
+        #$user | Set-AzureADUser -Department "$DeviceInfo"
+    }
+}
+
+Pause
+
+
+
