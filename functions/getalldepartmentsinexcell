@@ -1,0 +1,47 @@
+
+Connect-AzureAD
+
+pause
+
+$results = @()
+
+# Specify the path to the Excel file
+$filePath = "C:\Users\CONF ROOM DATA\TotalTeamsDeviceList\TeamsDeviceListCSV.csv"
+
+# Load the data from the Excel file into a variable
+$data = Import-Csv $filePath
+
+# Loop through each display name and write it to the console
+foreach ($row in $data) {
+    try {
+        $DisplayName = $($row.DisplayName)
+        
+        if (-not ($DisplayName)) {
+            Write-Host "One or more variables are null. Skipping script. Skipping Room $DisplayName"
+        }else{
+
+            $filter = "DisplayName eq '$DisplayName'"
+            $calendardata = Get-AzureADUser -Filter $filter
+
+
+             # Create an object representing the calendar processing settings
+            $output = [PSCustomObject]@{
+                DisplayName = $DisplayName
+                Department = $calendardata.Department                
+            }
+
+            # Add the object to the results array
+            $results += $output
+        }
+       
+    }
+    catch {
+        # Do this if a terminating exception happens
+    }
+}
+
+# Display results
+$results | Format-Table
+
+# Export results to CSV
+$results | Export-Csv -Path "C:\Users\calendar_departments$(get-date -f yyyy-MM-dd).csv" -NoTypeInformation
