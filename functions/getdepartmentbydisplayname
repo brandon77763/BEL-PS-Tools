@@ -1,0 +1,1 @@
+Get-AzureADUser -Filter "DisplayName eq 'DAL Conf Lonestar {VC}'" | fl
