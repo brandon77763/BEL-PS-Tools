@@ -1,0 +1,1 @@
+Get-Mailbox -filter {displayname -like '*conf *'} | Foreach-Object {Get-MailboxFolderPermission -Identity ($_.identity + ':\Calendar')} | Export-Csv -path "C:\Users\calendar_permissions$(get-date -f yyyy-MM-dd).csv"
