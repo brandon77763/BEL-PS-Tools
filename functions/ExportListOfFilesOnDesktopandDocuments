@@ -1,0 +1,4 @@
+Get-ChildItem "$env:userprofile\OneDrive - CRB\Documents\" | Export-Csv "$env:userprofile\OneDrive - CRB\Desktop\List-Of-Documents.csv"
+
+Get-ChildItem "$env:userprofile\OneDrive - CRB\Desktop\" | Export-Csv "$env:userprofile\OneDrive - CRB\Desktop\List-Of-DesktopItems.csv"
+
