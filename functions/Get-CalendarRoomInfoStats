@@ -1,0 +1,175 @@
+#Get All Room Setting For Each Room Add To Data Sting Then Parse String for Correct Setting and Send Allert if NULL.
+
+Connect-ExchangeOnline
+Connect-AzureAD
+
+
+
+$RoomDataString
+$RoomDataStringAlert
+
+$PresetUserType = "User"
+$PresetAutomateProcessing = "AutoAccept"
+$PresetAddOrganizerToSubject = "TRUE"
+$PresetDeleteComments = "FALSE"
+$PresetDeleteSubject = "FALSE"
+$PresetProcessExternalMeetingMessages = "FALSE"
+$PresetRemovePrivateProperty = "TRUE"
+$PresetAddAdditionalResponse = "FALSE"
+$PresetCalendarAccessRights = "AvailabilityOnly"
+$Preset
+$Preset
+$Preset
+$Preset
+$Preset
+$Preset
+$Preset
+
+
+
+
+
+function ForEachEmailLoop{
+    $MailboxUsers = Get-User -Filter "Name -like '* conf *'"
+    foreach ($User in $MailboxUsers)
+    {
+        $RoomDataString = " "
+        $RoomDataString += "###################### START ######################"
+
+       
+        $UserUPN = $User.UserPrincipalName
+        $UserIdentity = $user.Identity
+        #$UserSIP = $User.SipAddress
+
+        #$User | fl
+        $RoomDataString += $User | Out-String
+
+
+        #Folder Permissions
+        #$RoomDataString += Get-MailboxFolderPermission -Identity $UserIdentity':\Calendar' | Out-String
+
+        $GMFP = Get-MailboxFolderPermission -Identity 'brandon.luba@crbgroup.com:\Calendar' -User "Default" | Out-String  
+
+        #AD User Info
+        $AzU = Get-AzureADUser -Filter "userPrincipalName eq '$UserUPN'"
+
+        $AzUType = $AzU.UserType 
+        $AzUTelephoneNumber = $AzU.TelephoneNumber 
+        $AzUsageLocation = $AzU.UsageLocation 
+        $AzPhysicalDeliveryOfficeName = $AzU.PhysicalDeliveryOfficeName 
+        $AzPasswordPolicies = $AzU.PasswordPolicies 
+
+        $RoomDataString += $AzUType
+        $RoomDataString += $AzUTelephoneNumber
+        $RoomDataString += $AzUsageLocation
+        $RoomDataString += $AzPhysicalDeliveryOfficeName
+        $RoomDataString += $AzPasswordPolicies
+
+
+
+
+
+        #Calendar Processing
+        $calendarProcessing = Get-CalendarProcessing -Identity $UserIdentity
+
+        $CPDisplayName = $calendarProcessing.DisplayName 
+        $CPAutomateProcessing = $calendarProcessing.AutomateProcessing 
+        $CPAddOrganizerToSubject =  $calendarProcessing.AddOrganizerToSubject 
+        $CPDeleteComments =  $calendarProcessing.DeleteComments 
+        $CPDeleteSubject =  $calendarProcessing.DeleteSubject 
+        $CPProcessExternalMeetingMessages =  $calendarProcessing.ProcessExternalMeetingMessages 
+        $CPRemovePrivateProperty =  $calendarProcessing.RemovePrivateProperty 
+        $CPAddAdditionalResponse = $calendarProcessing.AddAdditionalResponse 
+        $CPAdditionalResponse =  $AdditionalResponse.ProcessExternalMeetingMessages 
+
+        $CPAllowConflicts = $calendarProcessing.AllowConflicts 
+        $CPBookingWindowInDays = $calendarProcessing.BookingWindowInDays 
+        $CPMaximumDurationInMinutes = $calendarProcessing.MaximumDurationInMinutes 
+        $CPAllowRecurringMeetings = $calendarProcessing.AllowRecurringMeetings 
+        $CPEnforceSchedulingHorizon = $calendarProcessing.EnforceSchedulingHorizon 
+        $CPScheduleOnlyDuringWorkHours = $calendarProcessing.ScheduleOnlyDuringWorkHours 
+        $CPConflictPercentageAllowed = $calendarProcessing.ConflictPercentageAllowed
+        $CPMaximumConflictInstances =  $calendarProcessing.MaximumConflictInstances
+        $CPForwardRequestsToDelegates = $calendarProcessing.ForwardRequestsToDelegates 
+        $CPAllRequestOutOfPolicy = $calendarProcessing.AllRequestOutOfPolicy 
+        $CPBookInPolicy = $calendarProcessing.BookInPolicy 
+        $CPRequestInPolicy = $calendarProcessing.RequestInPolicy 
+
+        $RoomDataString += $CPDisplayName
+        $RoomDataString += $CPAutomateProcessing
+        $RoomDataString += $CPAddOrganizerToSubject
+        $RoomDataString += $CPDeleteComments
+        $RoomDataString += $CPDeleteSubject
+        $RoomDataString += $CPProcessExternalMeetingMessages
+        $RoomDataString += $CPAddAdditionalResponse
+        $RoomDataString += $CPRemovePrivateProperty
+        $RoomDataString += $CPAdditionalResponse
+        $RoomDataString += $CPAllowConflicts
+        $RoomDataString += $CPBookingWindowInDays
+        $RoomDataString += $CPMaximumDurationInMinutes
+        $RoomDataString += $CPAllowRecurringMeetings
+        $RoomDataString += $CPEnforceSchedulingHorizon
+        $RoomDataString += $CPScheduleOnlyDuringWorkHours
+        $RoomDataString += $CPConflictPercentageAllowed
+        $RoomDataString += $CPMaximumConflictInstances
+        $RoomDataString += $CPForwardRequestsToDelegates
+        $RoomDataString += $CPAllRequestOutOfPolicy
+        $RoomDataString += $CPBookInPolicy
+        $RoomDataString += $CPRequestInPolicy
+
+
+
+        $RoomDataString += "##################### END ######################"
+        #Write-Host ($RoomDataString)
+
+
+
+        Write-Host ("############################## LOGS Start ##############################")
+        Write-Host ($UserIdentity)
+        if ($PresetUserType -ne $AzUType){
+            Write-Host ("Incorrect Preset User Type! IS-> $AzUType SHOULD BE-> $PresetUserType")                       
+        }
+
+        if ($PresetAutomateProcessing -ne $CPAutomateProcessing){
+            Write-Host ("Incorrect AutomateProcessing! IS-> $CPAutomateProcessing SHOULD BE-> $PresetAutomateProcessing")            
+        }
+
+        if ($PresetAddOrganizerToSubject -ne $CPAddOrganizerToSubject){
+            Write-Host ("Incorrect AddOrganizerToSubject! IS-> $CPAddOrganizerToSubject SHOULD BE-> $PresetAddOrganizerToSubject")            
+        }
+
+        if ($PresetDeleteComments -ne $CPDeleteComments){
+            Write-Host ("Incorrect DeleteComments! IS-> $CPDeleteComments SHOULD BE-> $PresetDeleteComments")            
+        }
+
+        if ($PresetDeleteSubject -ne $CPDeleteSubject){
+            Write-Host ("Incorrect DeleteSubject! IS-> $CPDeleteSubject SHOULD BE-> $PresetDeleteSubject")            
+        }
+
+        if ($PresetProcessExternalMeetingMessages -ne $CPProcessExternalMeetingMessages){
+            Write-Host ("Incorrect ProcessExternalMeetingMessages! IS-> $CPProcessExternalMeetingMessages SHOULD BE-> $PresetProcessExternalMeetingMessages")            
+        }
+
+        if ($PresetRemovePrivateProperty -ne $CPRemovePrivateProperty){
+            Write-Host ("Incorrect RemovePrivateProperty! IS-> $CPRemovePrivateProperty SHOULD BE-> $PresetRemovePrivateProperty")            
+        }
+
+        if ($PresetAddAdditionalResponse -ne $CPAddAdditionalResponse){
+            Write-Host ("Incorrect AddAdditionalResponse! IS-> $CPAddAdditionalResponse SHOULD BE-> $PresetAddAdditionalResponse")            
+        }
+
+        if (-not($GMFP.Contains($PresetCalendarAccessRights))){
+            Write-Host ("Incorrect Calendar Access Rights! IS-> $GMFP SHOULD BE-> $PresetCalendarAccessRights")            
+        }
+
+        
+        Write-Host ("############################## LOGS END ##############################")
+
+
+        
+    }
+}
+
+ForEachEmailLoop
+
+Pause
